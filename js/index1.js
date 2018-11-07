@@ -13,11 +13,13 @@ Myvue.prototype.init = function () {
     observer(this.$data);
     // 获得值
     let value = this.$data[this.$prop];
-    // 通知订阅者更新dom
-    new Watcher(this,this.$prop,value => {
-        console.log(`watcher ${this.$prop}的改动，要有动静了`)
-        this.$el.textContent = value
-    })
+            // 通知订阅者更新dom
+            // new Watcher(this,this.$prop,value => {
+            //     console.log(`watcher ${this.$prop}的改动，要有动静了`)
+            //     this.$el.textContent = value
+            // })
+    //通知模板编译来执行页面上模板变量替换
+    new Compile(this)
 }
 
 function observer (data) {
@@ -99,4 +101,32 @@ Watcher.prototype.update = function () {
         this.callback(this.value)
     }
 }
+function Compile (vm) {
+    this.vm = vm;
+    this.$el = vm.el;
+    // this.data = vm.data;
+    this.fragment = null;
+    this.init()
+}
+Compile.prototype = {
+    init: function () {
+        let value = this.vm.$data.name
+        document.querySelector('.form-control').value = value;
+        document.querySelector('.template').textContent  = value
+        // 通知订阅者更新dom
+        new Watcher(this.vm,this.vm.$prop, () => {
+            document.querySelector('.form-control').value = value;
+            document.querySelector('.template').textContent  = value
+        })
+        document.querySelector('.form-control').addEventListener('input',(e) => {
+            let targetValue = e.target.value
+            // this.vm.$data.name = e.target.value
 
+            if(value !== targetValue) {
+                document.querySelector('.form-control').value = targetValue;
+                document.querySelector('.template').textContent  = targetValue
+            }
+             
+        },false)
+    }
+}

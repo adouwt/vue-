@@ -23,20 +23,20 @@ Compile.prototype = { // 强制修改了Compile 的原型， 应该是逐个添�
   compileNode: function (fragment) { // 具体的dom 传进
       let childNodes = fragment.childNodes; // 具体的dom的 所有子节点
       [...childNodes].forEach(node => { // 具体的dom的某个节点
-      // 遍历dom树上的内容，不是标签元素就是文本信息
-      if (this.isElementNode(node)) { // 如果是一个元素节点， input div 
-      this.compile(node); // 将 23 放进这个node（input的value中）节点中 
-      }
-      let reg = /\{\{(.*)\}\}/;
-      let text = node.textContent; // 节点对应的文本内容
-      if (reg.test(text)) { // 这个节点文本内容有 {{}} 模板
-      let prop = reg.exec(text)[1]; // 获取到 {{a}} 中的 a
-      this.compileText(node, prop); // 将a变量对应的变量值放进 node节点中完成模板替换
-      }
-      // 编译子节点
-      if (node.childNodes && node.childNodes.length) {
-      this.compileNode(node); // 递归调用 继续将模板中的变量替换成变量值信息
-      }
+        // 遍历dom树上的内容，不是标签元素就是文本信息
+        if (this.isElementNode(node)) { // 如果是一个元素节点， input div 
+            this.compile(node); // 将 23 放进这个node（input的value中）节点中 
+        }
+        let reg = /\{\{(.*)\}\}/;
+        let text = node.textContent; // 节点对应的文本内容
+        if (reg.test(text)) { // 这个节点文本内容有 {{}} 模板
+            let prop = reg.exec(text)[1]; // 获取到 {{a}} 中的 a
+            this.compileText(node, prop); // 将a变量对应的变量值放进 node节点中完成模板替换
+        }
+        // 编译子节点
+        if (node.childNodes && node.childNodes.length) {
+            this.compileNode(node); // 递归调用 继续将模板中的变量替换成变量值信息
+        }
       });
   },
   compile: function (node) { // <input v-model="inputVal" />
@@ -62,7 +62,7 @@ Compile.prototype = { // 强制修改了Compile 的原型， 应该是逐个添�
         if (val === newValue) {
             return;
         }
-    this.vm.$data[prop] = newValue;
+        this.vm.$data[prop] = newValue;
     });
   },
   compileText: function (node, prop) { // 传递过来的变量属性，变成对应的变量值信息，更新视图 
