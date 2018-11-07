@@ -60,8 +60,8 @@ Compile.prototype = { // 强制修改了Compile 的原型， 应该是逐个添�
     node.addEventListener('input', e => { // 监听input 方法 为什么放在这里
         let newValue = e.target.value;
         if (val === newValue) {
-          return;
-      }
+            return;
+        }
     this.vm.$data[prop] = newValue;
     });
   },
